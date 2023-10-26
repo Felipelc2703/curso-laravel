@@ -7,7 +7,14 @@
     <title>Document</title>
 </head>
 <body>
-
-<h1>Bienvenido</h1>
+    
+    @if ($errors->any() )
+        @foreach ($errors->all() as $error)
+            <div class="error">
+                {{ $error}}
+            </div>
+        @endforeach
+    @endif
+    
 </body>
 </html>

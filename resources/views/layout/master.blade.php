@@ -7,7 +7,10 @@
     <title>Document</title>
 </head>
 <body>
+    
 
-<h1>Bienvenido</h1>
+    <h1>Dashboard</h1>
+
+    @yield('content')
 </body>
 </html>
