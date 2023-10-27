@@ -25,7 +25,7 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::group(['prefix' => 'dashboard', 'middleware' => 'auth'], function(){
+Route::group(['prefix' => 'dashboard', 'middleware' => ['auth','admin']], function(){
     Route::resources([
         'post' => App\Http\Controllers\Dashboard\PostController::class,
         'category' =>  App\Http\Controllers\CategoryController::class,
