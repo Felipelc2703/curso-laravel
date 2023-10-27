@@ -1,9 +1,11 @@
 <?php
 
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\Dashboard\PostController;
+// use App\Http\Controllers\CategoryController;
+// use App\Http\Controllers\Dashboard\PostController;
+use App\Http\Controllers\ProfileController;
+use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Dashbord\TestController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -19,31 +21,21 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('post', PostController::class);
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::resource('category',CategoryController::class);
+Route::group(['prefix' => 'dashboard', 'middleware' => 'auth'], function(){
+    Route::resources([
+        'post' => App\Http\Controllers\Dashboard\PostController::class,
+        'category' =>  App\Http\Controllers\CategoryController::class,
+    ]);
+});
 
-// Route::get('post', [PostController::class,'index']);
-// Route::get('post/{post}', [PostController::class,'show']);
-// Route::get('post/create', [PostController::class,'create']);
-// Route::get('post/{post}', PostController::class,'edit');
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
 
-// Route::post('post', [PostController::class,'store']);
-// Route::pust('post/{post}', [PostController::class,'update']);
-// Route::delete('post/{post}', [PostController::class,'delete']);
-
-
-
-// Route::get('/',[TestController::class,'index']);
-
-
-
-/*Route::get('/contacto', function () {
-    return "Contactame";
-})->name('contacto');
-
-Route::get('/custom',function(){
-    $mensaje = "Mensaje desde el servidor";
-    return view('custom',['msj' => $mensaje]);
-});*/
-
+require __DIR__.'/auth.php';

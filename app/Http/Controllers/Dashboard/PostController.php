@@ -26,7 +26,7 @@ class PostController extends Controller
         // return redirect()->route("post.create");
         // return to_route('post.create');
 
-        $posts = Post::paginate(5);
+        $posts = Post::paginate(2);
         echo view('dashboard.post.index', compact('posts'));
     }
 
