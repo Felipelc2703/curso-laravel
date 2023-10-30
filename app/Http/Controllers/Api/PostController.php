@@ -62,4 +62,10 @@ class PostController extends Controller
         return response()->json(Post::where('slug',$slug)->first());
     }
 
+    // public function slug(Post $post)
+    // {
+    //     return response()->json($post);
+    //     // return response()->json(Post::where('slug',$post->slug)->first());
+    // }
+
 }

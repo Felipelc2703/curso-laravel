@@ -68,13 +68,13 @@ class CategoryController extends Controller
         return response()->json($posts);
     }
 
-    // public function slug($slug)
-    // {
-    //     return response()->json(Category::where('slug',$slug)->first());
-    // }
-
-    public function slug(Post $post)
+    public function slug($slug)
     {
         return response()->json(Category::where('slug',$slug)->first());
     }
+
+    // public function slug(Post $post)
+    // {
+    //     return response()->json(Category::where('slug',$post->slug)->first());
+    // }
 }
