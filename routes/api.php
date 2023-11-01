@@ -25,12 +25,12 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
 
 
 
-    Route::resource('category', CategoryController::class)->except(["create","edit"]);
-    Route::resource('post', PostController::class)->except(["create","edit"]);
+    // Route::resource('category', CategoryController::class)->except(["create","edit"]);
+    // Route::resource('post', PostController::class)->except(["create","edit"]);
 
 });
 
-
+Route::get('category/all', [CategoryController::class, 'all']);
 Route::get('post/all',[PostController::class, 'all']);
 // Route::get('post/slug/{slug}',[PostController::class,'slug']);
 Route::get('post/slug/{post::slug}',[PostController::class,'slug']);
@@ -45,6 +45,8 @@ Route::get('category/{category}/post',[CategoryController::class,'getPostCategor
 
 Route::post('user/login',[UserController::class,'login']);
 // Route::resource('category', CategoryController::class)->except(["create","edit"]);
-// Route::resource('post', PostController::class)->except(["create","edit"]);
+Route::resource('post', PostController::class)->except(["create","edit"]);
 
 // Route::get('post/all',[PostController::class, 'all']);
+
+Route::post('post/upload/{post}', [PostController::class, 'upload']);

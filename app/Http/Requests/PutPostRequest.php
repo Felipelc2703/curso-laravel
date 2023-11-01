@@ -53,12 +53,12 @@ class PutPostRequest extends FormRequest
         // dd($this->route('post')->id);
         return [
             "title" => "required|min:5|max:255",
-            "slug" => "required|min:5|max:255|unique:posts,slug,".$this->route('post')->id,
+            "slug" => "min:5|max:255|unique:posts,slug,".$this->route('post')->id,
             "content" => "required|min:7",
             "category_id" => "required|integer",
             "description" => "required|min:7",
             "posted" => "required",
-            "image" => "mimes:jpg,jpeg,png|max:10240",
+            // "image" => "mimes:jpg,jpeg,png|max:10240",
         ];
         // return [
         //     "title" => "required|min:5|max:255",
