@@ -142,7 +142,8 @@
                 
                 this.$axios.post("/api/post/upload/"+this.post.id,formData,{
                     headers: {
-                        "content-type": "multipart/form-data"
+                        "content-type": "multipart/form-data",
+                        "Authorization": 'Bearrer '+this.$root.token,
                     }
                 }).then((res) =>{
                     console.log(res)
@@ -158,7 +159,8 @@
                 
                 this.$axios.post("/api/post/upload/"+this.post.id,formData,{
                     headers: {
-                        "content-type": "multipart/form-data"
+                        "content-type": "multipart/form-data",
+                        "Authorization": 'Bearrer '+ this.$root.token,
                     }
                 }).then((res) =>{
                     console.log(res)
@@ -175,22 +177,21 @@
                 this.postError.posted= ''
             },
             getCategories() {
-                this.$axios.get("/api/category/all").then(res =>{
+                const config = {
+                    headers: {Authorization: 'Bearrer '+this.$root.token}
+                }
+                this.$axios.get("/api/category/all", config).then(res =>{
                     this.categories = res.data
                     console.log(res.data)
                 })
             },
-
-            // getPost() {
-            //     this.$axios.get("/api/post/slug/"+this.$route.params.slug).then(res =>{
-            //         this.postEditar = res.data
-            //         this.initPost()
-            //         console.log(this.postEditar)
-            //     })
-            // },
-
             async getPost() {
-                this.postEditar = await this.$axios.get("/api/post/slug/"+this.$route.params.slug)
+
+                const config = {
+                    headers: {Authorization: 'Bearrer '+this.$root.token}
+                }
+
+                this.postEditar = await this.$axios.get("/api/post/slug/"+this.$route.params.slug, config)
                 this.post = this.postEditar.data
             },
             
@@ -202,12 +203,15 @@
                 this.post.posted = this.postEditar.posted
             },
             submit() {
-                console.log(this.post)
+                // console.log(this.post)
                 this.clearErrorsPosts()
+                const config = {
+                    headers: {Authorization: 'Bearrer '+this.$root.token}
+                }
 
                 if(this.postEditar == '')
                 {
-                    return this.$axios.post("/api/post",this.post).then(res =>{
+                    return this.$axios.post("/api/post",this.post, config).then(res =>{
                         this.$oruga.notification.open({
                         message: 'Registro Procesado con Exito',
                         position: 'bottom-right',
@@ -232,9 +236,7 @@
                 }  
                 else {
                     //actualizar 
-                    this.$axios.patch("/api/post/"+this.post.id,
-                        this.post
-                    ).then(res =>{
+                    this.$axios.patch("/api/post/"+this.post.id,this.post,config).then(res =>{
                         this.$oruga.notification.open({
                         message: 'Registro actualizado con Exito',
                         position: 'bottom-right',

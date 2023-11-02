@@ -23,30 +23,29 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::group(['middleware' => 'auth:sanctum'], function(){
 
+    Route::get('category/all', [CategoryController::class, 'all']);
 
+    Route::resource('category', CategoryController::class)->except(["create","edit"]);
+    Route::resource('post', PostController::class)->except(["create","edit"]);
 
-    // Route::resource('category', CategoryController::class)->except(["create","edit"]);
-    // Route::resource('post', PostController::class)->except(["create","edit"]);
+    Route::get('post/all',[PostController::class, 'all']);
+    Route::get('post/slug/{post::slug}',[PostController::class,'slug']);
+
+    Route::get('category/slug/{slug}',[CategoryController::class,'slug']);
+    Route::get('category/{category}/post',[CategoryController::class,'getPostCategory']);
+
+    // Route::get('post/slug/{slug}',[PostController::class,'slug']);
+
+    // Route::get('category/all', [CategoryController::class, 'all']);
+    Route::post('post/upload/{post}', [PostController::class, 'upload']);
 
 });
-
-Route::get('category/all', [CategoryController::class, 'all']);
-Route::get('post/all',[PostController::class, 'all']);
-// Route::get('post/slug/{slug}',[PostController::class,'slug']);
-Route::get('post/slug/{post::slug}',[PostController::class,'slug']);
-
-
-Route::get('category/slug/{slug}',[CategoryController::class,'slug']);
-Route::get('category/all', [CategoryController::class, 'all']);
-Route::get('category/{category}/post',[CategoryController::class,'getPostCategory']);
-
-
 //Usuarios
-
 Route::post('user/login',[UserController::class,'login']);
+Route::post('user/logout',[UserController::class,'logout']);
+Route::post('user/token-check',[UserController::class,'checkToken']);
 // Route::resource('category', CategoryController::class)->except(["create","edit"]);
-Route::resource('post', PostController::class)->except(["create","edit"]);
+// Route::resource('post', PostController::class)->except(["create","edit"]);
 
 // Route::get('post/all',[PostController::class, 'all']);
 
-Route::post('post/upload/{post}', [PostController::class, 'upload']);

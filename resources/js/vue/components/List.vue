@@ -98,6 +98,7 @@
 
         },
         async mounted() {
+            // console.log(this.$cookies.get('auth')) 
             this.listPage()
             
             // this.$axios.get('/api/post').then((res) => {
@@ -111,19 +112,32 @@
                 setTimeout(this.listPage,100)  
             },
             listPage() {
-                console.log("click"+ this.currentPage)
+
+                const config = {
+                    // headers: {Authorization: `Bearrer ${this.$root.token}`}
+
+                    // headers: {Authorization: `Bearrer ${this.$cookies.get('auth').token}`}
+
+                    headers: {Authorization: 'Bearrer '+ this.$root.token}
+                }
+                // console.log("click"+ this.currentPage)
                 this.isLoading = true
-                this.$axios.get('/api/post?page='+this.currentPage).then((res) => {
+                // this.$axios.get('/api/post?page='+this.currentPage).then((res) => {
+                    this.$axios.get('/api/post?page=' + this.currentPage, config).then((res) => {
                     this.posts = res.data
-                    console.log(this.posts)
+                    // console.log(this.posts)
                     this.isLoading = false
                 });
             },
             deletePost() {
+
+                const config = {
+                    headers: {Authorization: 'Bearrer '+ this.$root.token}
+                }
                 this.confirmDeleteActive = false
                 this.posts.data.splice(this.deletePostRow.index,1)
                 // this.$axios.delete('/api/post/'+post.id)
-                this.$axios.delete('/api/post/'+this.deletePostRow.row.id)
+                this.$axios.delete('/api/post/'+this.deletePostRow.row.id, config)
 
                 this.$oruga.notification.open({
                 message: 'Mensaje Eliminado',
