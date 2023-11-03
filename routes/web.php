@@ -54,6 +54,12 @@ Route::get('/vue/{n1?}/{n2?}',function(){
     return view('vue');
 });
 
+Route::get('/test',function(){
+    return [ 
+        'Laravel test' =>app()->version()
+    ];
+});
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

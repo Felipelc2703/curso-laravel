@@ -7,6 +7,7 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\PutPostRequest;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
@@ -14,6 +15,36 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+    public function all()
+    {
+
+        //Comprobar cache
+        //cache existe => devolver cache
+        //Cache no existe => consulta BD - cache y retornar
+        // if(Cache::has('post_all'))
+        // {
+
+        //     dd(Cache::get('post_all'));
+        //     return response()->json(Cache::get('post_all'));
+        // } else {
+
+        //     $posts = Post::all();
+        //     Cache::put('post_all',$posts);
+
+        //     return response()->json($posts);
+        // }
+
+        return response()->json(Cache::remember('post_all3', now()->addMinutes(10), function(){
+            return Post::all();
+        }));
+
+        //Caso donde tarda demasiado 
+        // return response()->json(Cache::remember('post_all5', now()->addMinutes(10), function(){
+        //     return response()->json(Post::all());
+        // }));
+    }
+
     public function index()
     {
         return response()->json(Post::with('category')->paginate(10));
@@ -64,10 +95,7 @@ class PostController extends Controller
         return response()->json("Post eliminado con exito");
     }
 
-    public function all()
-    {
-        return response()->json(Post::get());
-    }
+
 
     public function slug($slug)
     {

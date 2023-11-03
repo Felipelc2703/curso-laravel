@@ -3,10 +3,10 @@
 @section('content')
     <x-web.blog.post.index :posts="$posts" >
 
-        <h1>Listado principal de posts</h1>
+        <h1>Listado principal de </h1>
 
         @slot('header')
-            <h1>Listado principal de posts -- slot con nombre</h1>
+            <h1>Listado principal de posts -- slot con </h1>
         @endslot
         
         @slot('footer')
