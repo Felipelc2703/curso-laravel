@@ -1,93 +1,97 @@
 <template>
+    <div class="container mx-auto">
+        <div class="mt-6 mb-2 px-6 py-4 bg-white shadow-md rounded-md">
 
-    <h1 v-if="postEditar">Actualizar Post: <span class="font-bold"> {{ post.title }}</span></h1>
-    <h1 v-else>Crear Post</h1>
+            <h1 v-if="postEditar">Actualizar Post: <span class="font-bold"> {{ post.title }}</span></h1>
+            <h1 v-else>Crear Post</h1>
 
-    <form @submit.prevent="submit">
-        <div class="grid grid-cols-2 gap-4 mt-8">
-            <div class="col-span-2">
-                <o-field label="Titulo" :variant="postError.title ? 'danger' : 'primary'" :message="postError.title">
-                    <o-input  v-model="post.title"></o-input>
-                </o-field>
-            </div>
+            <form @submit.prevent="submit">
+                <div class="grid grid-cols-2 gap-4 mt-8">
+                    <div class="col-span-2">
+                        <o-field label="Titulo" :variant="postError.title ? 'danger' : 'primary'" :message="postError.title">
+                            <o-input  v-model="post.title"></o-input>
+                        </o-field>
+                    </div>
 
-            <o-field label="Descripción" 
-                :variant="postError.description ? 'danger' : 'primary'" 
-                :message="postError.description"
-                >
-                <o-input type="textarea"  v-model="post.description"></o-input>
-            </o-field>
+                    <o-field label="Descripción" 
+                        :variant="postError.description ? 'danger' : 'primary'" 
+                        :message="postError.description"
+                        >
+                        <o-input type="textarea"  v-model="post.description"></o-input>
+                    </o-field>
 
-            <o-field label="contenido" :variant="postError.content ? 'danger' : 'primary'" :message="postError.content">
-                <o-input type="textarea"  v-model="post.content"></o-input>
-            </o-field>
+                    <o-field label="contenido" :variant="postError.content ? 'danger' : 'primary'" :message="postError.content">
+                        <o-input type="textarea"  v-model="post.content"></o-input>
+                    </o-field>
 
-            <o-field label="Categoria" :variant="postError.category_id ? 'danger' : 'primary'" :message="postError.category_id" >
-                <o-select placeholder="Seleccione una categoria" v-model="post.category_id">
-                    <option v-for="c in categories" v-bind:key="c.id" :value="c.id">{{ c.title }}</option>
-                </o-select>
-            </o-field>
+                    <o-field label="Categoria" :variant="postError.category_id ? 'danger' : 'primary'" :message="postError.category_id" >
+                        <o-select placeholder="Seleccione una categoria" v-model="post.category_id">
+                            <option v-for="c in categories" v-bind:key="c.id" :value="c.id">{{ c.title }}</option>
+                        </o-select>
+                    </o-field>
 
-            <o-field label="Publicado" :variant="postError.posted ? 'danger' : 'primary'" :message="postError.posted">
-                <o-select placeholder="Seleccione un estado" v-model="post.posted">
-                    <option value="yes">Si</option>
-                    <option value="not">No</option>
-                </o-select>
-            </o-field>
+                    <o-field label="Publicado" :variant="postError.posted ? 'danger' : 'primary'" :message="postError.posted">
+                        <o-select placeholder="Seleccione un estado" v-model="post.posted">
+                            <option value="yes">Si</option>
+                            <option value="not">No</option>
+                        </o-select>
+                    </o-field>
 
-            <div class="flex gap-2" v-if="postEditar">
-                <o-field :message="fileError">
-                    <o-upload v-model="file">
-                        <o-button tag="a" variant="primary">
-                            <o-icon icon="upload"></o-icon>
-                            <span>Click para cargar</span>
-                        </o-button>
-                    </o-upload>
+                    <div class="flex gap-2" v-if="postEditar">
+                        <o-field :message="fileError">
+                            <o-upload v-model="file">
+                                <o-button tag="a" variant="primary">
+                                    <o-icon icon="upload"></o-icon>
+                                    <span>Click para cargar</span>
+                                </o-button>
+                            </o-upload>
 
-                    <o-button 
-                        icon-left="upload"
-                        @Click="upload()"
-                    >
-                        Subir
-                    </o-button>
-                </o-field>
-            </div>
+                            <o-button 
+                                icon-left="upload"
+                                @Click="upload()"
+                            >
+                                Subir
+                            </o-button>
+                        </o-field>
+                    </div>
 
 
-            <div class="flex gap-2" v-if="postEditar">
-                <o-field :message="fileError">
-                    <o-upload v-model="filesDaD" multiple drag-drop>
-                        <section multiple drag-drop>
-                            <o-icon icon="upload"></o-icon>
-                            <span>Drag and Drop para cargar archivos</span>
-                        </section>
-                    </o-upload>
+                    <div class="flex gap-2" v-if="postEditar">
+                        <o-field :message="fileError">
+                            <o-upload v-model="filesDaD" multiple drag-drop>
+                                <section multiple drag-drop>
+                                    <o-icon icon="upload"></o-icon>
+                                    <span>Drag and Drop para cargar archivos</span>
+                                </section>
+                            </o-upload>
 
-                    <o-button 
-                        icon-left="upload"
-                        @Click="upload()"
-                    >
-                        Subir
-                    </o-button>
-                </o-field>
+                            <o-button 
+                                icon-left="upload"
+                                @Click="upload()"
+                            >
+                                Subir
+                            </o-button>
+                        </o-field>
 
-                <span v-for="(file, index) in filesDaD" :key="index">
-                    {{ file.name }}
-                    <o-button
-                        icon-left="times"
-                        size="small"
-                        native-type="button"
-                        @click="deleteDropFile(index)">
-                    </o-button>
-                </span>
-            </div>
-            
+                        <span v-for="(file, index) in filesDaD" :key="index">
+                            {{ file.name }}
+                            <o-button
+                                icon-left="times"
+                                size="small"
+                                native-type="button"
+                                @click="deleteDropFile(index)">
+                            </o-button>
+                        </span>
+                    </div>
+                    
+                </div>
+                
+                <br>
+
+                <o-button variant="primary" native-type="submit">Enviar</o-button>
+            </form>
         </div>
-        
-        <br>
-
-        <o-button variant="primary" native-type="submit">Enviar</o-button>
-    </form>
+    </div>
 </template>
 
 <script>

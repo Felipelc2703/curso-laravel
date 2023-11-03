@@ -4,7 +4,7 @@
 
 
 h1{
-    @apply text-3xl text-center my-5
+    @apply text-4xl font-bold text-center my-3
 }
 :root {
     --oruga-modal-content-padding:0

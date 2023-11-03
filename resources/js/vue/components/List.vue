@@ -1,86 +1,91 @@
 <template>
-    <div>
-        <h1>Listado de post</h1>
+    <div class="container mx-auto">
 
-        <o-button icon-left="plus" @click="$router.push({name: 'save'})">Crear</o-button>
-        <!-- <router-link :to="{name:'save'}">Crear</router-link> -->
-        <div class="mt-6"></div>
+        <div class="mt-6 mb-2 px-6 py-4 bg-white shadow-md rounded-md">
 
-        <o-table :loading="isLoading" :data="posts.current_page && posts.data.length == 0 ? [] : posts.data">
+            <h1>Listado de post</h1>
 
-            <o-table-column field="id" label="ID" numeric v-slot="p">
-                {{ p.row.id}}
-            </o-table-column>
+            <o-button icon-left="plus" @click="$router.push({name: 'save'})">Crear</o-button>
+            <!-- <router-link :to="{name:'save'}">Crear</router-link> -->
+            <div class="mt-6"></div>
 
-            <o-table-column field="Title" label="titulo" v-slot="p">
-                {{ p.row.title}}
-            </o-table-column> 
+            <o-table :loading="isLoading" :data="posts.current_page && posts.data.length == 0 ? [] : posts.data">
 
-            <o-table-column field="posted" label="Posteado" v-slot="p">
-                {{ p.row.posted}}
-            </o-table-column> 
+                <o-table-column field="id" label="ID" numeric v-slot="p">
+                    {{ p.row.id}}
+                </o-table-column>
 
-            <o-table-column field="created_at" label="Fecha" v-slot="p">
-                {{ p.row.created_at}}
-            </o-table-column> 
+                <o-table-column field="Title" label="titulo" v-slot="p">
+                    {{ p.row.title}}
+                </o-table-column> 
 
-            <o-table-column field="category" label="Categoria" v-slot="p">
-                {{ p.row.category.title}}
-            </o-table-column>
+                <o-table-column field="posted" label="Posteado" v-slot="p">
+                    {{ p.row.posted}}
+                </o-table-column> 
 
-            <o-table-column field="slug" label="Acciones" v-slot="p">
-                <router-link class="mr-3" :to="{name:'save',params:{ 'slug': p.row.slug }}">Editar   </router-link>
-                <o-button 
-                    icon-left="delete" 
-                    :rounded="true" 
-                    size="small" 
-                    variant="danger" 
-                    @click="deletePostRow = p; confirmDeleteActive=true"
-                    
-                    > 
-                    Eliminar
-                </o-button>
-            </o-table-column>
+                <o-table-column field="created_at" label="Fecha" v-slot="p">
+                    {{ p.row.created_at}}
+                </o-table-column> 
 
-        </o-table>
+                <o-table-column field="category" label="Categoria" v-slot="p">
+                    {{ p.row.category.title}}
+                </o-table-column>
 
-        <!-- modal -->
-        <o-modal v-model:active="confirmDeleteActive">
-            <div class="p-4">
-                <p>¿Seguro que quieres eliminar el registro seleccionado</p>
-            </div>
+                <o-table-column field="slug" label="Acciones" v-slot="p">
+                    <router-link class="mr-3" :to="{name:'save',params:{ 'slug': p.row.slug }}">Editar   </router-link>
+                    <o-button 
+                        icon-left="delete" 
+                        :rounded="true" 
+                        size="small" 
+                        variant="danger" 
+                        @click="deletePostRow = p; confirmDeleteActive=true"
+                        
+                        > 
+                        Eliminar
+                    </o-button>
+                </o-table-column>
 
-            <div class="flex flex-row-reverse gap-2 bg-gray-100 p-3">
-                <o-button 
-                    variant="danger" 
-                    @click="deletePost(p)"
-                >
-                    Eliminar
-                </o-button>
- 
-                <o-button
-                    @click="confirmDeleteActive = false"
-                >
-                    Cancelar
-                </o-button>
-            </div>
-        </o-modal>
-        
-        <br>
+            </o-table>
 
-        <o-pagination
-        v-if="posts.current_page && posts.data.length > 0 "
-            @change="updatePage"
-            v-model:current="currentPage"
-            :total="posts.total"
-            :range-before="2"
-            :range-after="2"
-            order="centered"
-            size="small"
-            :simple="false"
-            :rounded="true"
-            :per-page="posts.per_page">
-        </o-pagination>
+            <!-- modal -->
+            <o-modal v-model:active="confirmDeleteActive">
+                <div class="p-4">
+                    <p>¿Seguro que quieres eliminar el registro seleccionado</p>
+                </div>
+
+                <div class="flex flex-row-reverse gap-2 bg-gray-100 p-3">
+                    <o-button 
+                        variant="danger" 
+                        @click="deletePost(p)"
+                    >
+                        Eliminar
+                    </o-button>
+    
+                    <o-button
+                        @click="confirmDeleteActive = false"
+                    >
+                        Cancelar
+                    </o-button>
+                </div>
+            </o-modal>
+            
+            <br>
+
+            <o-pagination
+            v-if="posts.current_page && posts.data.length > 0 "
+                @change="updatePage"
+                v-model:current="currentPage"
+                :total="posts.total"
+                :range-before="2"
+                :range-after="2"
+                order="centered"
+                size="small"
+                :simple="false"
+                :rounded="true"
+                :per-page="posts.per_page">
+            </o-pagination>
+
+        </div>
 
     </div>
 </template>
