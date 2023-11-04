@@ -8,6 +8,9 @@ use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Http\Request; 
 use App\Http\Requests\StorePostRequest;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
@@ -18,6 +21,13 @@ class PostController extends Controller
      */
     public function index()
     {
+        $posts = Post::paginate(5);
+
+        if(!Gate::allows('index',$posts[0])) {
+            abort(403);
+        }
+        // dd(Gate::allows('index',$posts[0]));
+        // dd(Gate::allows('index'));
 
         // dd(Category::find(1)->posts);
         // return route("post.create");
@@ -26,7 +36,7 @@ class PostController extends Controller
         // return redirect()->route("post.create");
         // return to_route('post.create');
 
-        $posts = Post::paginate(2);
+        
         echo view('dashboard.post.index', compact('posts'));
     }
 
@@ -37,6 +47,10 @@ class PostController extends Controller
     {
         $categories = Category::pluck('id','title');
         $post = new Post();
+
+        if(!Gate::allows('create',$post)) {
+            abort(403);
+        }
         // $categories = Category::get('id','titulo');
 
         // dd($categories);
@@ -61,7 +75,18 @@ class PostController extends Controller
         // dd($request->all());
 
         // dd($request->validated());
-        Post::create($request->validated());  
+
+
+        // $post = Post::create($request->validated()); 
+
+        $post = new Post($request->validated());
+
+        // Auth::user()->posts()->save($post);
+        
+        if(!Gate::allows('create',$post)) {
+            abort(403);
+        }
+        Auth::user()->posts()->save($post);
 
         // return redirect("/post/create");
         // return redirect()->route("post.create");
@@ -108,6 +133,51 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
+
+        //test
+        // if(Gate::any(['update','view'],$post))
+        // {
+        //     dd(true);
+        // }
+
+        // if(Gate::none(['update','view'],$post))
+        // {
+        //     dd(true);
+        // }
+
+        // if(Auth::user()->can('update',$post))
+        // {
+        //     dd(true);
+        // }
+
+        // if(Gate::forUser(User::find(2))->allows('update',$post))
+        // {
+        //     dd(true);
+        // }
+
+        // Gate::allowIf(function(User $user){
+        //     return !$user->isAdmin();
+
+        // });
+
+        // Gate::allowIf(
+        //     fn(User $user) =>
+        //     $user->isAdmin()
+        // );
+
+        // Gate::denyIf(
+        //     fn(User $user) =>
+        //     !$user->isAdmin()
+        // );
+
+        Gate::authorize('create',$post);
+        //test
+
+
+        // if(!Gate::allows('view',$post))
+        // {
+        //     return abort(403);
+        // }
         return view('dashboard.post.show', compact('post'));
         // echo "show";
     }
@@ -117,9 +187,16 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
+        // dd(Gate::inspect('update',$post));
+        // if(!Gate::allows('update',$post))
+        if(!Gate::inspect('update',$post))
+        {
+            return abort(403);
+        }
         $categories = Category::pluck('id','title');
 
-        echo view('dashboard.post.edit',compact('categories','post'));
+        // echo view('dashboard.post.edit',compact('categories','post'));
+        return view('dashboard.post.edit',compact('categories','post'));
     }
 
     /**
@@ -129,7 +206,12 @@ class PostController extends Controller
     {
         // dd($request->image);
             // dd($request->validated()['image']->getClientOriginalName());
-            
+        
+        if(!Gate::allows('update-post',$post))
+        {
+            return abort(403);
+        }
+
         $data = $request->validated();
         if(isset($data['image']))
         {
@@ -148,6 +230,12 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+
+        if(!Gate::allows('delete',$post))
+        {
+            return abort(403);
+        }
+
         echo "Destroy";
         $post->delete();
         return to_route('post.index')->with('status', 'Registro eliminado!');

@@ -43,12 +43,17 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function isAdmin()
+    public function isAdmin():bool
     {
         return $this->rol == "admin";
     }
     public function isRegular()
     {
         return $this->rol == "regular";
+    }
+
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
     }
 }

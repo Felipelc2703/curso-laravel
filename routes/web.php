@@ -33,6 +33,10 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth','admin']], functi
         'category' =>  App\Http\Controllers\CategoryController::class,
     ]);
 });
+// Route::resources([
+//     'post' => App\Http\Controllers\Dashboard\PostController::class,
+//     'category' =>  App\Http\Controllers\CategoryController::class,
+// ]);
 
 Route::group(['prefix' => 'blog'], function(){
     Route::controller(BlogController::class)->group(function(){
@@ -50,6 +54,7 @@ Route::group(['prefix' => 'blog'], function(){
 // Route::get('/vue',function(){
 //     return view('vue');
 // });
+
 Route::get('/vue/{n1?}/{n2?}',function(){
     return view('vue');
 });

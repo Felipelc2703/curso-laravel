@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\PutPostRequest;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
@@ -68,6 +69,11 @@ class PostController extends Controller
 
     public function update(PutPostRequest $request, Post $post)
     {
+        if(Gate::allows('update_post',$post))
+        {
+            return abort(403);
+        }
+        
         $post->update($request->validated());
         return response()->json($post);
         // return response()->json($post);
